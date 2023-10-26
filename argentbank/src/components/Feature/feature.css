@@ -8,6 +8,7 @@
 .feature-item {
   flex: 1;
   padding: 2.5rem;
+  background-color: white;
 }
 
 .feature-item-title {

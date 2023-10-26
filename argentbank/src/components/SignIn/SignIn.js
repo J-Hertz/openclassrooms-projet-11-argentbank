@@ -1,42 +1,52 @@
 import './signIn.css';
+import Authentification from '../Authentification/Authentification';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 function SignIn() {
+  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      if (token) {
+        const [header, payload, signature] = token.split('.');
+        const decodedPayload = JSON.parse(atob(payload));
+        const expirationDate = new Date(decodedPayload.exp * 1000);
+        const currentDate = new Date();
+        if (currentDate < expirationDate) {
+          navigate('/user');
+          console.log(token);
+        }
+      }
+    } catch (error) {
+      console.error('token invalide', error);
+    }
+  }, [token, navigate]);
+
   return (
-    <div>
-      <main className="main bg-dark">
-        <section className="sign-in-content">
-          <i className="fa fa-user-circle sign-in-icon"></i>
-          <h1>Sign In</h1>
-          <form>
-            <div className="input-wrapper">
-              <label for="username">Username</label>
-              <input type="text" id="username" />
-            </div>
-            <div className="input-wrapper">
-              <label for="password">Password</label>
-              <input type="password" id="password" />
-            </div>
-            <div className="input-remember">
-              <input type="checkbox" id="remember-me" />
-              <label for="remember-me">Remember me</label>
-            </div>
+    <section className="sign-in-content">
+      <FontAwesomeIcon icon={faUserCircle} />
+      <h1>Sign In</h1>
+      <form onSubmit={Authentification}>
+        <div className="input-wrapper">
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" name="email" />
+        </div>
+        <div className="input-wrapper">
+          <label htmlFor="password">Password</label>
+          <input type="password" id="password" name="password" />
+        </div>
+        <div className="input-remember">
+          <input type="checkbox" id="remember-me" />
+          <label htmlFor="remember-me">Remember me</label>
+        </div>
 
-            <button class="sign-in-button">Sign In</button>
-
-            {/* <a href="./user" className="sign-in-button">
-              Sign In
-            </a>
-             PLACEHOLDER DUE TO STATIC SITE
-
-            <a href="./user.html" class="sign-in-button">Sign In</a>
-
-            SHOULD BE THE BUTTON BELOW
-
-            <button class="sign-in-button">Sign In</button> */}
-          </form>
-        </section>
-      </main>
-    </div>
+        <button className="sign-in-button">Sign In</button>
+      </form>
+    </section>
   );
 }
 
