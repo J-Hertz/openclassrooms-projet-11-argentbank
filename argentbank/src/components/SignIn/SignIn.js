@@ -9,7 +9,6 @@ function SignIn() {
   const [redirect, setRedirect] = useState(false);
 
   async function Authentification(e) {
-    console.log('toto1');
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -32,7 +31,6 @@ function SignIn() {
     if (response.ok) {
       window.localStorage.setItem('token', data.body.token);
       const token = window.localStorage.getItem('token');
-      console.log('navigate');
       setRedirect(true);
     } else {
       console.log("erreur d'authentification");
