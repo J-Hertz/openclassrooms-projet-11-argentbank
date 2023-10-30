@@ -7,14 +7,20 @@ import Footer from './components/Footer/Footer';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
+//REDUX
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Header />
-      <AppRouter />
-      <Footer />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Header />
+        <AppRouter />
+        <Footer />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
