@@ -40,7 +40,7 @@ function Header() {
         <div className="displayFlex">
           <div className="main-nav-item">
             <FontAwesomeIcon icon={faUserCircle} />
-            {userInfo.firstName}
+            {userInfo.userName}
           </div>
           <Link className="main-nav-logo" to="/" onClick={handleSignOut}>
             <div className="main-nav-item">

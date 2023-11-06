@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchUserInfos } from '../services/user';
 
 // Action asynchrone pour récupérer les informations de l'utilisateur
 export const fetchUserInfo = createAsyncThunk(
@@ -10,20 +11,7 @@ export const fetchUserInfo = createAsyncThunk(
       throw new Error('Token not found');
     }
 
-    const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.body; // Utilisez data.body pour extraire les données
-    } else {
-      throw new Error('Failed to fetch user data');
-    }
+    return fetchUserInfos(token);
   }
 );
 
@@ -63,7 +51,6 @@ const userSlice = createSlice({
       userName: '',
       firstName: '',
       lastName: '',
-      token: '',
     },
     isLoggedIn: false,
     isLoading: false,
@@ -77,7 +64,6 @@ const userSlice = createSlice({
         userName: '',
         firstName: '',
         lastName: '',
-        token: '',
       };
       state.isLoggedIn = false;
     },
@@ -91,7 +77,7 @@ const userSlice = createSlice({
       .addCase(fetchUserInfo.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.user = action.payload; // Utilisez action.payload directement
+        state.user = action.payload;
       })
       .addCase(fetchUserInfo.rejected, (state) => {
         state.isLoading = false;
@@ -104,7 +90,7 @@ const userSlice = createSlice({
       .addCase(updateUserName.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
-        state.user = action.payload; // Utilisez action.payload directement
+        state.user = action.payload;
       })
       .addCase(updateUserName.rejected, (state) => {
         state.isLoading = false;

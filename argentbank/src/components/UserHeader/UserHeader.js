@@ -26,7 +26,7 @@ function UserHeader() {
           <h1>
             Welcome back
             <br />
-            {userInfo.firstName} {userInfo.lastName}
+            {userInfo.userName}
           </h1>
           <button className="edit-button" onClick={handleEditClick}>
             Edit Name
