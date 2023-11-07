@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchUserInfos } from '../services/user';
+import {
+  fetchUserInfoService,
+  updateUserNameService,
+} from '../services/userService';
 
 // Action asynchrone pour récupérer les informations de l'utilisateur
 export const fetchUserInfo = createAsyncThunk(
@@ -11,7 +14,7 @@ export const fetchUserInfo = createAsyncThunk(
       throw new Error('Token not found');
     }
 
-    return fetchUserInfos(token);
+    return fetchUserInfoService(token);
   }
 );
 
@@ -24,21 +27,7 @@ export const updateUserName = createAsyncThunk(
       throw new Error('Token not found');
     }
 
-    const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userName: newUserName }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.body; // Utilisez data.body pour extraire les données
-    } else {
-      throw new Error('Failed to update username');
-    }
+    return updateUserNameService(token, newUserName);
   }
 );
 

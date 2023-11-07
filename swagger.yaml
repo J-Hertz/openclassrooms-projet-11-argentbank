@@ -65,11 +65,9 @@ paths:
         - User Module
       summary: User Profile API
       description: API for fetching a user profile
-      #produces:
-       # - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -94,13 +92,99 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successully
+          description: User profile retrieved successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/account/transactions:
+    get:
+      tags:
+        - Transaction Module
+      summary: Get all transactions
+      description: Retrieves all transactions for the current month, grouped by account
+      security:
+        - Bearer: []
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionList'
+        '404':
+          description: No transactions found
+    post:
+      tags:
+        - Transaction Module
+      summary: Add a new transaction
+      description: Adds a new transaction
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          description: Transaction data to create
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Created - Transaction created successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Data validation error
+  /user/account/transactions/{transactionid}:
+    get:
+      tags:
+        - Transaction Module
+      summary: Get transaction by ID
+      description: Retrieves the details of a specific transaction based on its ID
+      security:
+        - Bearer: []
+      parameters:
+        - name: transactionid
+          in: path
+          description: ID of the transaction to retrieve
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction retrieved successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: Transaction not found
+    put:
+      tags:
+        - Transaction Module
+      summary: Update a transaction
+      description: Updates the information of a specific transaction based on its ID
+      security:
+        - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          description: Updated transaction data
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Data validation error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -156,3 +240,19 @@ definitions:
     properties:
       userName:
         type: string
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: integer
+        description: ID of the transaction
+      amount:
+        type: number
+        description: Transaction amount
+      description:
+        type: string
+        description: Transaction description
+  TransactionList:
+    type: array
+    items:
+      $ref: '#/definitions/Transaction'

@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { signInService } from '../../services/userService';
 
 function SignIn() {
   const [redirect, setRedirect] = useState(false);
@@ -20,21 +21,7 @@ function SignIn() {
 
     const payload = JSON.stringify(forms);
 
-    const response = await fetch('http://localhost:3001/api/v1/user/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: payload,
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      window.localStorage.setItem('token', data.body.token);
-      const token = window.localStorage.getItem('token');
-      setRedirect(true);
-    } else {
-      console.log("erreur d'authentification");
-    }
+    return signInService(payload, setRedirect);
   }
 
   return (
