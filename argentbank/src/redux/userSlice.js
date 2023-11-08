@@ -45,18 +45,7 @@ const userSlice = createSlice({
     isLoading: false,
     isError: false,
   },
-  reducers: {
-    signOut: (state) => {
-      state.user = {
-        id: '',
-        email: '',
-        userName: '',
-        firstName: '',
-        lastName: '',
-      };
-      state.isLoggedIn = false;
-    },
-  },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserInfo.pending, (state) => {
@@ -89,7 +78,5 @@ const userSlice = createSlice({
 });
 
 export const selectUserInfo = (state) => state.user.user;
-
-export const { signOut } = userSlice.actions;
 
 export default userSlice.reducer;

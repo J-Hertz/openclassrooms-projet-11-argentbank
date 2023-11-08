@@ -9,8 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserInfo, selectUserInfo } from '../../redux/userSlice';
-
-import { signOut } from '../../redux/userSlice';
+import { validateTokenService } from '../../services/userService';
 
 function Header() {
   const location = useLocation();
@@ -23,10 +22,11 @@ function Header() {
   }, [dispatch]);
 
   const handleSignOut = () => {
-    dispatch(signOut());
+    localStorage.clear();
+    window.location = '/';
   };
 
-  if (location.pathname === '/user') {
+  if (validateTokenService()) {
     return (
       <nav className="main-nav">
         <Link className="main-nav-logo" to="/">
@@ -40,7 +40,7 @@ function Header() {
         <div className="displayFlex">
           <div className="main-nav-item">
             <FontAwesomeIcon icon={faUserCircle} />
-            {userInfo.userName}
+            <Link to="/user">{userInfo.userName}</Link>
           </div>
           <Link className="main-nav-logo" to="/" onClick={handleSignOut}>
             <div className="main-nav-item">

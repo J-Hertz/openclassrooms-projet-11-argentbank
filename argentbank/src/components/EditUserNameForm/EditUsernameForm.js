@@ -20,11 +20,14 @@ function EditUsernameForm({ onClose }) {
 
   const handleSave = async () => {
     try {
-      await dispatch(updateUserName(newUsername));
-      onClose(); // Fermez le formulaire une fois la mise à jour terminée
+      const updatedUserInfo = await dispatch(updateUserName(newUsername));
+      if (updatedUserInfo) {
+        onClose();
+      } else {
+        console.error('Failed to update username');
+      }
     } catch (error) {
       console.error('Failed to update username', error);
-      // Gérez les erreurs, par exemple, affichez un message à l'utilisateur
     }
   };
 
