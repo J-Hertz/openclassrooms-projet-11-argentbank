@@ -1,82 +1,68 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchUserInfoService,
   updateUserNameService,
 } from '../services/userService';
 
-// Action asynchrone pour récupérer les informations de l'utilisateur
-export const fetchUserInfo = createAsyncThunk(
-  'user/fetchUserInfo',
-  async () => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      throw new Error('Token not found');
-    }
-
-    return fetchUserInfoService(token);
-  }
-);
-
-export const updateUserName = createAsyncThunk(
-  'user/updateUserName',
-  async (newUserName) => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      throw new Error('Token not found');
-    }
-
-    return updateUserNameService(token, newUserName);
-  }
-);
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    user: {
-      id: '',
-      email: '',
-      userName: '',
-      firstName: '',
-      lastName: '',
-    },
-    isLoggedIn: false,
-    isLoading: false,
-    isError: false,
+const initialState = {
+  user: {
+    id: '',
+    email: '',
+    userName: '',
+    firstName: '',
+    lastName: '',
   },
+};
 
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserInfo.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-      .addCase(fetchUserInfo.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.user = action.payload;
-      })
-      .addCase(fetchUserInfo.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-      .addCase(updateUserName.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-      .addCase(updateUserName.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.user = action.payload;
-      })
-      .addCase(updateUserName.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      });
+export const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    fetchUserInfoSuccess: (state, action) => {
+      state.user = action.payload;
+    },
+    updateUserNameSuccess: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
+export const { fetchUserInfoSuccess, updateUserNameSuccess } =
+  userSlice.actions;
+
 export const selectUserInfo = (state) => state.user.user;
+
+export const fetchUserInfo = () => async (dispatch) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+
+    const userInfo = await fetchUserInfoService(token);
+    dispatch(fetchUserInfoSuccess(userInfo));
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+    window.location = '/';
+    localStorage.clear();
+  }
+};
+
+export const updateUserName = (newUserName) => async (dispatch) => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('Token not found. User may not be logged in.');
+      return;
+    }
+
+    const updatedUserInfo = await updateUserNameService(token, newUserName);
+    dispatch(updateUserNameSuccess(updatedUserInfo));
+  } catch (error) {
+    console.error('Failed to update username:', error);
+    window.location = '/';
+    localStorage.clear();
+  }
+};
 
 export default userSlice.reducer;

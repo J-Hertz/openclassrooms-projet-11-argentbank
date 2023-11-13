@@ -20,12 +20,8 @@ function EditUsernameForm({ onClose }) {
 
   const handleSave = async () => {
     try {
-      const updatedUserInfo = await dispatch(updateUserName(newUsername));
-      if (updatedUserInfo) {
-        onClose();
-      } else {
-        console.error('Failed to update username');
-      }
+      await dispatch(updateUserName(newUsername));
+      onClose();
     } catch (error) {
       console.error('Failed to update username', error);
     }
