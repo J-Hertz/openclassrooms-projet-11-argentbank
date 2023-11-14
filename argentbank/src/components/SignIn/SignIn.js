@@ -1,13 +1,13 @@
-import './signIn.css';
-
+import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { signInService } from '../../services/userService';
+import './signIn.css';
 
 function SignIn() {
   const [redirect, setRedirect] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   async function Authentification(e) {
     e.preventDefault();
@@ -21,7 +21,12 @@ function SignIn() {
 
     const payload = JSON.stringify(forms);
 
-    return signInService(payload, setRedirect);
+    try {
+      await signInService(payload, setRedirect);
+    } catch (error) {
+      console.log('toto');
+      setErrorMessage('Identifiants incorrects');
+    }
   }
 
   return (
@@ -30,6 +35,7 @@ function SignIn() {
       <section className="sign-in-content">
         <FontAwesomeIcon icon={faUserCircle} />
         <h1>Sign In</h1>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <form onSubmit={Authentification}>
           <div className="input-wrapper">
             <label htmlFor="username">Username</label>

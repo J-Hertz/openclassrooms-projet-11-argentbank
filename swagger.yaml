@@ -113,6 +113,11 @@ paths:
           type: integer
           required: true
           description: User ID
+        - in: query
+          name: authorization
+          type: string
+          required: true
+          description: Authorization Token
       produces:
         - application/json
       responses:
@@ -127,7 +132,7 @@ paths:
         '403':
           description: Forbidden
         '404':
-          description: Resource Not Found
+          description: User Not Found
         '500':
           description: Internal Server Error
   /accounts/{id}:
@@ -142,6 +147,11 @@ paths:
           type: integer
           required: true
           description: Account ID
+        - in: query
+          name: authorization
+          type: string
+          required: true
+          description: Authorization Token
       produces:
         - application/json
       responses:
@@ -151,10 +161,12 @@ paths:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
+        '401':
+          description: Unauthorized
         '403':
           description: Forbidden
         '404':
-          description: Resource Not Found
+          description: User Not Found
         '500':
           description: Internal Server Error
   /accounts/{id}/transactions:
@@ -169,6 +181,23 @@ paths:
           type: integer
           required: true
           description: Account ID
+        - in: query
+          name: authorization
+          type: string
+          required: true
+          description: Authorization Token
+        - in: query
+          name: from_date
+          type: string
+          required: true
+          format: date
+          description: Start date for transactions (YYYY-MM-DD)
+        - in: query
+          name: to_date
+          type: string
+          required: true
+          format: date
+          description: End date for transactions (YYYY-MM-DD)
       produces:
         - application/json
       responses:
@@ -178,12 +207,15 @@ paths:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
+        '401':
+          description: Unauthorized
         '403':
           description: Forbidden
         '404':
-          description: Resource Not Found
+          description: Transactions Not Found
         '500':
           description: Internal Server Error
+
   /transactions/{id}:
     put:
       tags:
@@ -202,6 +234,11 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/Transaction'
+        - in: query
+          name: authorization
+          type: string
+          required: true
+          description: Authorization Token
       produces:
         - application/json
       responses:
@@ -211,10 +248,12 @@ paths:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
+        '401':
+          description: Unauthorized
         '403':
           description: Forbidden
         '404':
-          description: Resource Not Found
+          description: Transaction Not Found
         '500':
           description: Internal Server Error
 

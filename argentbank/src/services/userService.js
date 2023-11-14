@@ -46,7 +46,7 @@ export const signInService = async (payload, setRedirect) => {
     const token = window.localStorage.getItem('token');
     setRedirect(true);
   } else {
-    console.log("erreur d'authentification");
+    throw new Error("Erreur d'authentification");
   }
 };
 

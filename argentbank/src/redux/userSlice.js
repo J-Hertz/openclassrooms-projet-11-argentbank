@@ -52,8 +52,7 @@ export const updateUserName = (newUserName) => async (dispatch) => {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.warn('Token not found. User may not be logged in.');
-      return;
+      window.location = '/';
     }
 
     const updatedUserInfo = await updateUserNameService(token, newUserName);
