@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { signInService } from '../../services/userService';
+import { signInApi } from '../../services/userService';
 import './signIn.css';
 
 function SignIn() {
@@ -22,7 +22,9 @@ function SignIn() {
     const payload = JSON.stringify(forms);
 
     try {
-      await signInService(payload, setRedirect);
+      const token = await signInApi(payload);
+      window.localStorage.setItem('token', token);
+      setRedirect(true);
     } catch (error) {
       console.log('toto');
       setErrorMessage('Identifiants incorrects');

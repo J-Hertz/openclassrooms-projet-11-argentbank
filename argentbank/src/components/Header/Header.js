@@ -9,7 +9,6 @@ import { useLocation } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserInfo, selectUserInfo } from '../../redux/userSlice';
-import { validateTokenService } from '../../services/userService';
 
 function Header() {
   const location = useLocation();
@@ -26,7 +25,31 @@ function Header() {
     window.location = '/';
   };
 
-  if (validateTokenService()) {
+  const validateToken = () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return false;
+    }
+
+    const tokenParts = token.split('.');
+
+    if (tokenParts.length !== 3) {
+      return false;
+    }
+
+    const payload = JSON.parse(atob(tokenParts[1]));
+
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    if (payload.exp && payload.exp < currentTimestamp) {
+      return false;
+    }
+
+    return true;
+  };
+
+  if (validateToken()) {
     return (
       <nav className="main-nav">
         <Link className="main-nav-logo" to="/">

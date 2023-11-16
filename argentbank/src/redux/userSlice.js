@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  fetchUserInfoService,
-  updateUserNameService,
-} from '../services/userService';
+import { fetchUserInfoApi, updateUserNameApi } from '../services/userService';
 
 const initialState = {
   user: {
@@ -39,7 +36,7 @@ export const fetchUserInfo = () => async (dispatch) => {
       return;
     }
 
-    const userInfo = await fetchUserInfoService(token);
+    const userInfo = await fetchUserInfoApi(token);
     dispatch(fetchUserInfoSuccess(userInfo));
   } catch (error) {
     console.error('Failed to fetch user info:', error);
@@ -55,7 +52,7 @@ export const updateUserName = (newUserName) => async (dispatch) => {
       window.location = '/';
     }
 
-    const updatedUserInfo = await updateUserNameService(token, newUserName);
+    const updatedUserInfo = await updateUserNameApi(token, newUserName);
     dispatch(updateUserNameSuccess(updatedUserInfo));
   } catch (error) {
     console.error('Failed to update username:', error);
