@@ -124,7 +124,7 @@ paths:
         '200':
           description: User's accounts retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/AccountList'
         '400':
           description: Invalid Fields
         '401':
@@ -158,7 +158,7 @@ paths:
         '200':
           description: Account retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/Account'
         '400':
           description: Invalid Fields
         '401':
@@ -204,7 +204,7 @@ paths:
         '200':
           description: Transactions retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '401':
@@ -321,15 +321,18 @@ definitions:
       description:
         type: string
         description: Transaction description
+      date:
+        type: string
+        description: Transaction date
   Account:
     type: object
     properties:
       id:
         type: integer
         description: Account ID
-      accountNumber:
+      accountName:
         type: string
-        description: Account number
+        description: Account name
       balance:
         type: number
         description: Account balance
@@ -349,3 +352,20 @@ definitions:
         type: string
         format: date-time
         description: Transaction date and time
+  AccountList:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Account ID
+        accountName:
+          type: string
+          description: Account name
+        balance:
+          type: number
+          description: Account balance
+          
+        
+
