@@ -1,50 +1,66 @@
-export const fetchUserInfoApi = async (token) => {
-  const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-  });
+import axios from 'axios';
 
-  if (response.ok) {
-    const data = await response.json();
-    return data.body;
-  } else {
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.clear();
+      window.location = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
+export const fetchUserInfoApi = async (token) => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3001/api/v1/user/profile',
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    return response.data.body;
+  } catch (error) {
     throw new Error('Failed to fetch user data');
   }
 };
 
 export const updateUserNameApi = async (token, newUserName) => {
-  const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ userName: newUserName }),
-  });
+  try {
+    const response = await axios.put(
+      'http://localhost:3001/api/v1/user/profile',
+      { userName: newUserName },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-  if (response.ok) {
-    const data = await response.json();
-    return data.body;
-  } else {
+    return response.data.body;
+  } catch (error) {
     throw new Error('Failed to update username');
   }
 };
 
 export const signInApi = async (payload, setRedirect) => {
-  const response = await fetch('http://localhost:3001/api/v1/user/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: payload,
-  });
+  try {
+    const response = await axios.post(
+      'http://localhost:3001/api/v1/user/login',
+      payload,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
 
-  const data = await response.json();
-
-  if (response.ok) {
-    return data.body.token;
-  } else {
-    throw new Error("Erreur d'authentification");
+    return response.data.body.token;
+  } catch (error) {
+    throw new Error('Authentification error');
   }
 };
