@@ -245,7 +245,7 @@ paths:
         '200':
           description: Transaction updated successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/TransactionResponse'
         '400':
           description: Invalid Fields
         '401':
@@ -321,9 +321,6 @@ definitions:
       description:
         type: string
         description: Transaction description
-      date:
-        type: string
-        description: Transaction date
   Account:
     type: object
     properties:

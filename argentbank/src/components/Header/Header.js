@@ -5,14 +5,11 @@ import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserInfo, selectUserInfo } from '../../redux/userSlice';
 
 function Header() {
-  const location = useLocation();
-
   const userInfo = useSelector(selectUserInfo);
   const dispatch = useDispatch();
 

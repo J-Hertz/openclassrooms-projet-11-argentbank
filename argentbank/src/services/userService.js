@@ -2,20 +2,21 @@ import axios from 'axios';
 
 axios.interceptors.response.use(
   (response) => {
+    console.log('toto');
     return response;
   },
   (error) => {
     if (error.response.status === 401) {
       localStorage.clear();
-      window.location = '/';
+      window.location = '/sign-in';
     }
     return Promise.reject(error);
   }
 );
 
 export const fetchUserInfoApi = async (token) => {
-  try {
-    const response = await axios.post(
+  const response = await axios
+    .post(
       'http://localhost:3001/api/v1/user/profile',
       {},
       {
@@ -24,12 +25,12 @@ export const fetchUserInfoApi = async (token) => {
           'Content-Type': 'application/json',
         },
       }
-    );
+    )
+    .catch((error) => {
+      console.log('error');
+    });
 
-    return response.data.body;
-  } catch (error) {
-    throw new Error('Failed to fetch user data');
-  }
+  return response.data.body;
 };
 
 export const updateUserNameApi = async (token, newUserName) => {
@@ -47,7 +48,8 @@ export const updateUserNameApi = async (token, newUserName) => {
 
     return response.data.body;
   } catch (error) {
-    throw new Error('Failed to update username');
+    return Promise.reject(error);
+    // throw new Error('Failed to update username');
   }
 };
 
@@ -61,6 +63,7 @@ export const signInApi = async (payload, setRedirect) => {
 
     return response.data.body.token;
   } catch (error) {
-    throw new Error('Authentification error');
+    return Promise.reject(error);
+    // throw new Error('Authentification error');
   }
 };

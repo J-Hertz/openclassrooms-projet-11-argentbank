@@ -26,7 +26,6 @@ function SignIn() {
       window.localStorage.setItem('token', token);
       setRedirect(true);
     } catch (error) {
-      console.log('toto');
       setErrorMessage('Identifiants incorrects');
     }
   }

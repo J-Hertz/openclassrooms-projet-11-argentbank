@@ -26,17 +26,12 @@ function User() {
     return true;
   };
 
-  if (!validateToken()) {
-    window.location = '/';
-    localStorage.clear();
-  } else {
-    return (
-      <main className="main bg-dark">
-        <UserHeader />
-        <AccountList />
-      </main>
-    );
-  }
+  return (
+    <main className="main bg-dark">
+      <UserHeader />
+      <AccountList />
+    </main>
+  );
 }
 
 export default User;

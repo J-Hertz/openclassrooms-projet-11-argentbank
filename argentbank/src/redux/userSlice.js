@@ -30,35 +30,20 @@ export const { fetchUserInfoSuccess, updateUserNameSuccess } =
 export const selectUserInfo = (state) => state.user.user;
 
 export const fetchUserInfo = () => async (dispatch) => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return;
-    }
-
-    const userInfo = await fetchUserInfoApi(token);
-    dispatch(fetchUserInfoSuccess(userInfo));
-  } catch (error) {
-    console.error('Failed to fetch user info:', error);
-    window.location = '/';
-    localStorage.clear();
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return;
   }
+
+  const userInfo = await fetchUserInfoApi(token);
+  dispatch(fetchUserInfoSuccess(userInfo));
 };
 
 export const updateUserName = (newUserName) => async (dispatch) => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location = '/';
-    }
+  const token = localStorage.getItem('token');
 
-    const updatedUserInfo = await updateUserNameApi(token, newUserName);
-    dispatch(updateUserNameSuccess(updatedUserInfo));
-  } catch (error) {
-    console.error('Failed to update username:', error);
-    window.location = '/';
-    localStorage.clear();
-  }
+  const updatedUserInfo = await updateUserNameApi(token, newUserName);
+  dispatch(updateUserNameSuccess(updatedUserInfo));
 };
 
 export default userSlice.reducer;
