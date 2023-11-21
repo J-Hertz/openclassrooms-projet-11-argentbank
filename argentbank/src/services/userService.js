@@ -1,18 +1,7 @@
 import axios from 'axios';
+import axiosInterceptor from '../interceptor/interceptor';
 
-axios.interceptors.response.use(
-  (response) => {
-    console.log('toto');
-    return response;
-  },
-  (error) => {
-    if (error.response.status === 401) {
-      localStorage.clear();
-      window.location = '/sign-in';
-    }
-    return Promise.reject(error);
-  }
-);
+axiosInterceptor();
 
 export const fetchUserInfoApi = async (token) => {
   const response = await axios
