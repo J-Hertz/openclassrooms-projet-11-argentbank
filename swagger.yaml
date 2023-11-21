@@ -113,7 +113,7 @@ paths:
           type: integer
           required: true
           description: User ID
-        - in: query
+        - in: header
           name: authorization
           type: string
           required: true
@@ -125,8 +125,6 @@ paths:
           description: User's accounts retrieved successfully
           schema:
             $ref: '#/definitions/AccountList'
-        '400':
-          description: Invalid Fields
         '401':
           description: Unauthorized
         '403':
@@ -147,7 +145,7 @@ paths:
           type: integer
           required: true
           description: Account ID
-        - in: query
+        - in: header
           name: authorization
           type: string
           required: true
@@ -159,14 +157,12 @@ paths:
           description: Account retrieved successfully
           schema:
             $ref: '#/definitions/Account'
-        '400':
-          description: Invalid Fields
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '404':
-          description: User Not Found
+          description: Account Not Found
         '500':
           description: Internal Server Error
   /accounts/{id}/transactions:
@@ -181,7 +177,7 @@ paths:
           type: integer
           required: true
           description: Account ID
-        - in: query
+        - in: header
           name: authorization
           type: string
           required: true
@@ -204,18 +200,15 @@ paths:
         '200':
           description: Transactions retrieved successfully
           schema:
-            $ref: '#/definitions/Transaction'
-        '400':
-          description: Invalid Fields
+            $ref: '#/definitions/TransactionList'
         '401':
           description: Unauthorized
         '403':
           description: Forbidden
         '404':
-          description: Transactions Not Found
+          description: Account Not Found
         '500':
           description: Internal Server Error
-
   /transactions/{id}:
     put:
       tags:
@@ -233,8 +226,8 @@ paths:
           description: Update transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/Transaction'
-        - in: query
+            $ref: '#/definitions/UpdateTransaction'
+        - in: header
           name: authorization
           type: string
           required: true
@@ -245,7 +238,7 @@ paths:
         '200':
           description: Transaction updated successfully
           schema:
-            $ref: '#/definitions/TransactionResponse'
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '401':
@@ -256,7 +249,6 @@ paths:
           description: Transaction Not Found
         '500':
           description: Internal Server Error
-
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -315,40 +307,64 @@ definitions:
   Transaction:
     type: object
     properties:
-      amount:
-        type: number
-        description: Transaction amount
+      id:
+        type: integer
+      date:
+        type: string
       description:
         type: string
-        description: Transaction description
+      amount:
+        type: number
+      currency:
+        type: string
+      type:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  TransactionList:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        type:
+          type: string
+        category:
+          type: string
+        notes:
+          type: string
+  UpdateTransaction:
+    type: object
+    properties:
+      category:
+        type: string
+      notes:
+        type: string
   Account:
     type: object
     properties:
       id:
         type: integer
         description: Account ID
-      accountName:
+      name:
         type: string
         description: Account name
       balance:
         type: number
         description: Account balance
-  TransactionResponse:
-    type: object
-    properties:
-      id:
-        type: integer
-        description: Transaction ID
-      amount:
-        type: number
-        description: Transaction amount
-      description:
+      currency:
         type: string
-        description: Transaction description
-      date:
-        type: string
-        format: date-time
-        description: Transaction date and time
   AccountList:
     type: array
     items:
@@ -357,12 +373,9 @@ definitions:
         id:
           type: integer
           description: Account ID
-        accountName:
+        name:
           type: string
           description: Account name
         balance:
           type: number
           description: Account balance
-          
-        
-
