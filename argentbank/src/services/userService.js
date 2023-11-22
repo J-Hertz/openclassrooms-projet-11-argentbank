@@ -4,8 +4,8 @@ import axiosInterceptor from '../interceptor/interceptor';
 axiosInterceptor();
 
 export const fetchUserInfoApi = async (token) => {
-  const response = await axios
-    .post(
+  try {
+    const response = await axios.post(
       'http://localhost:3001/api/v1/user/profile',
       {},
       {
@@ -14,12 +14,13 @@ export const fetchUserInfoApi = async (token) => {
           'Content-Type': 'application/json',
         },
       }
-    )
-    .catch((error) => {
-      console.log('error');
-    });
+    );
 
-  return response.data.body;
+    return response.data.body;
+  } catch (error) {
+    console.log('Error fetching user info:', error);
+    throw new Error('Failed to fetch user info');
+  }
 };
 
 export const updateUserNameApi = async (token, newUserName) => {

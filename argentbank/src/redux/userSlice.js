@@ -30,13 +30,17 @@ export const { fetchUserInfoSuccess, updateUserNameSuccess } =
 export const selectUserInfo = (state) => state.user.user;
 
 export const fetchUserInfo = () => async (dispatch) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    return;
-  }
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return;
+    }
 
-  const userInfo = await fetchUserInfoApi(token);
-  dispatch(fetchUserInfoSuccess(userInfo));
+    const userInfo = await fetchUserInfoApi(token);
+    dispatch(fetchUserInfoSuccess(userInfo));
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+  }
 };
 
 export const updateUserName = (newUserName) => async (dispatch) => {

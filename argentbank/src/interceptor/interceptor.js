@@ -3,7 +3,6 @@ import axios from 'axios';
 function axiosInterceptor() {
   axios.interceptors.response.use(
     (response) => {
-      console.log('toto');
       return response;
     },
     (error) => {
