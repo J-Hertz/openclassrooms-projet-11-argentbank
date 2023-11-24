@@ -19,7 +19,6 @@ export const fetchUserInfoApi = async (token) => {
     return response.data.body;
   } catch (error) {
     console.log('Error fetching user info:', error);
-    throw new Error('Failed to fetch user info');
   }
 };
 
@@ -39,7 +38,6 @@ export const updateUserNameApi = async (token, newUserName) => {
     return response.data.body;
   } catch (error) {
     return Promise.reject(error);
-    // throw new Error('Failed to update username');
   }
 };
 
@@ -54,6 +52,5 @@ export const signInApi = async (payload, setRedirect) => {
     return response.data.body.token;
   } catch (error) {
     return Promise.reject(error);
-    // throw new Error('Authentification error');
   }
 };
