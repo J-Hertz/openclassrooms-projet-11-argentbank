@@ -29,14 +29,15 @@ export const { fetchUserInfoSuccess, updateUserNameSuccess } =
 
 export const selectUserInfo = (state) => state.user.user;
 
-export const fetchUserInfo = () => async (dispatch) => {
+export const fetchUserInfo = () => (dispatch) => {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
+    const pathname = window.location.pathname;
+    if (pathname == '/sign-in') {
       return;
     }
 
-    const userInfo = await fetchUserInfoApi(token);
+    const userInfo = fetchUserInfoApi(token);
     dispatch(fetchUserInfoSuccess(userInfo));
   } catch (error) {
     console.error('Error fetching user info:', error);

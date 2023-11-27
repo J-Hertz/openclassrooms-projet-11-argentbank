@@ -379,3 +379,5 @@ definitions:
         balance:
           type: number
           description: Account balance
+        currency:
+          type: string
