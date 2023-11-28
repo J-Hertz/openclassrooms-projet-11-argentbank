@@ -8,7 +8,7 @@ function axiosInterceptor() {
     (error) => {
       if (error.response.status === 401) {
         localStorage.clear();
-        window.location = '/sign-in';
+        //  window.location = '/sign-in';
       }
       return Promise.reject(error);
     }

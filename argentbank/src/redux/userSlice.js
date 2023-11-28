@@ -29,16 +29,23 @@ export const { fetchUserInfoSuccess, updateUserNameSuccess } =
 
 export const selectUserInfo = (state) => state.user.user;
 
-export const fetchUserInfo = () => (dispatch) => {
+export const fetchUserInfo = () => async (dispatch) => {
   try {
     const token = localStorage.getItem('token');
     const pathname = window.location.pathname;
-    if (pathname == '/sign-in') {
+    if (pathname === '/sign-in') {
       return;
     }
 
-    const userInfo = fetchUserInfoApi(token);
-    dispatch(fetchUserInfoSuccess(userInfo));
+    const userInfo = await fetchUserInfoApi(token);
+
+    if (!userInfo) {
+      localStorage.clear();
+
+      window.location = '/sign-in';
+    } else {
+      dispatch(fetchUserInfoSuccess(userInfo));
+    }
   } catch (error) {
     console.error('Error fetching user info:', error);
   }

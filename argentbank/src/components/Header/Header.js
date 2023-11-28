@@ -14,7 +14,10 @@ function Header() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchUserInfo());
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(fetchUserInfo());
+    }
   }, [dispatch]);
 
   const handleSignOut = () => {
@@ -22,31 +25,8 @@ function Header() {
     window.location = '/';
   };
 
-  const validateToken = () => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      return false;
-    }
-
-    const tokenParts = token.split('.');
-
-    if (tokenParts.length !== 3) {
-      return false;
-    }
-
-    const payload = JSON.parse(atob(tokenParts[1]));
-
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-
-    if (payload.exp && payload.exp < currentTimestamp) {
-      return false;
-    }
-
-    return true;
-  };
-
-  if (validateToken()) {
+  const token = localStorage.getItem('token');
+  if (token) {
     return (
       <nav className="main-nav">
         <Link className="main-nav-logo" to="/">

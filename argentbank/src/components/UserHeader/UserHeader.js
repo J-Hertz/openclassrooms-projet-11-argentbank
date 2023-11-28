@@ -36,5 +36,4 @@ function UserHeader() {
     </div>
   );
 }
-
 export default UserHeader;
